@@ -1,8 +1,9 @@
-import requests
+import asyncio
+import aiohttp
 from typing import Dict, Any
 
 PRICES_BASE_URL = "https://prices.runescape.wiki/api/v1/osrs/latest"
-USER_AGENT = "python-requests - @npoet on discord"
+USER_AGENT = "aiohttp - @npoet on discord"
 HEADERS = {"User-Agent": USER_AGENT}
 
 ITEM_DICT = {
@@ -17,31 +18,35 @@ ITEM_DICT = {
 }
 
 
-def get_price(item_id: int) -> int:
+async def get_price(session: aiohttp.ClientSession, item_id: int) -> int:
     """
-    returns the high price for a given item_id from the osrs prices wiki
-    :param item_id: integer id of the item to get prices for
-    :return: high price for given item_id (int)
+    Fetch the high price for a given item_id.
+    :param session: async client session
+    :param item_id: int id for the item to fetch
+    :return: today's high price (int)
     """
-    req = requests.get(PRICES_BASE_URL + f"?id={item_id}", headers=HEADERS).json()
-    return req["data"][str(item_id)]["high"]
+    async with session.get(f"{PRICES_BASE_URL}?id={item_id}") as resp:
+        data = await resp.json()
+        return data["data"][str(item_id)]["high"]
 
 
-def get_total_price(items: Dict[str, Any]) -> int:
+async def get_total_price(items: Dict[str, Any]) -> int:
     """
-    returns the total price for a given items dictionary from the osrs prices wiki
-    :param items: a mapping of item names to their component ids
-    :return: a total price for the given items (int)
+    Fetch prices for all items concurrently and return total.
+    :param items: mapping of item names to included ids
+    :return: today's total high price (int)
     """
     total_price = 0
-    for item in items.values():
-        temp_price = 0
-        for i_id in item:
-            price = get_price(i_id)
-            temp_price += price
-        total_price += temp_price
+    async with aiohttp.ClientSession(headers=HEADERS) as session:
+        tasks = []
+        for item_ids in items.values():
+            for i_id in item_ids:
+                tasks.append(get_price(session, i_id))
+        results = await asyncio.gather(*tasks)
+        total_price = sum(results)
     return total_price
 
 
 if __name__ == "__main__":
-    print(get_total_price(ITEM_DICT))
+    total = asyncio.run(get_total_price(ITEM_DICT))
+    print(total)
