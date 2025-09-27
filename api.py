@@ -49,4 +49,4 @@ async def get_total_price(items: Dict[str, Any]) -> int:
 
 if __name__ == "__main__":
     total = asyncio.run(get_total_price(ITEM_DICT))
-    print(total)
+    print(f"{total:,} gp")
