@@ -47,7 +47,26 @@ async def get_total_price(items: Dict[str, Any]) -> int:
         return sum(results)
 
 
+def format_gp(value: int) -> str:
+    """
+    Formats GP values into OSRS-style notation.
+    :param value: int value of items
+    :return: formatted GP value string
+    """
+    if value >= 1_000_000_000:
+        return f"{value/1_000_000_000:.1f}B gp"
+    elif value >= 1_000_000:
+        return f"{value/1_000_000:.1f}M gp"
+    elif value >= 1_000:
+        return f"{value/1_000:.1f}K gp"
+    else:
+        return f"{value} gp"
+
+
 if __name__ == "__main__":
     # Calc total price and display as GP
     total = asyncio.run(get_total_price(ITEM_DICT))
-    print(f"{total:,} gp")
+    full_fmt = f"{total:,}"
+    compact_fmt = format_gp(total)
+
+    print(f"{full_fmt} ({compact_fmt})")
