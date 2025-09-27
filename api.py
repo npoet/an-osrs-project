@@ -37,15 +37,14 @@ async def get_total_price(items: Dict[str, Any]) -> int:
     :param items: mapping of item names to included ids
     :return: today's total high price (int)
     """
-    total_price = 0
     async with aiohttp.ClientSession(headers=HEADERS) as session:
-        tasks = []
-        for item_ids in items.values():
-            for i_id in item_ids:
-                tasks.append(get_price(session, i_id))
+        tasks = [
+            get_price(session, i_id)
+            for item_ids in items.values()
+            for i_id in item_ids
+        ]
         results = await asyncio.gather(*tasks)
-        total_price = sum(results)
-    return total_price
+        return sum(results)
 
 
 if __name__ == "__main__":
