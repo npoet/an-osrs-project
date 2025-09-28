@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import json
 from pathlib import Path
-from api.prices_wiki import fetch_prices
+from api.prices_wiki import fetch_prices, fetch_timeseries_for_set
 from api.utils import format_gp
 
 # Load items.json at startup
@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://npoet.dev"],
+    allow_origins=["https://npoet.dev", "http://localhost:4321"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -64,3 +64,11 @@ async def get_breakdown():
             "compact": format_gp(grand_total),
         },
     }
+
+
+@app.get("/timeseries")
+async def get_timeseries(timestep: Optional[str] = "5m"):
+    """
+    Return aggregated timeseries for the full set of items.
+    """
+    return await fetch_timeseries_for_set(ITEM_DICT, timestep=timestep)
