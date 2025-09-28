@@ -37,13 +37,15 @@ async def get_breakdown():
     for item_name, ids in ITEM_DICT.items():
         subtotal = sum(prices[i_id] for i_id in ids)
         grand_total += subtotal
-        breakdown.append({
-            "item": item_name,
-            "ids": ids,
-            "subtotal_raw": subtotal,
-            "subtotal_formatted": f"{subtotal:,} gp",
-            "subtotal_compact": format_gp(subtotal),
-        })
+        breakdown.append(
+            {
+                "item": item_name,
+                "ids": ids,
+                "subtotal_raw": subtotal,
+                "subtotal_formatted": f"{subtotal:,} gp",
+                "subtotal_compact": format_gp(subtotal),
+            }
+        )
 
     return {
         "items": breakdown,
@@ -51,5 +53,5 @@ async def get_breakdown():
             "raw": grand_total,
             "formatted": f"{grand_total:,} gp",
             "compact": format_gp(grand_total),
-        }
+        },
     }
