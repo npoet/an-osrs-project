@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Any, Dict, List
 import json
 from pathlib import Path
@@ -11,6 +12,14 @@ with open(ITEMS_FILE, "r", encoding="utf-8") as f:
     ITEM_DICT: Dict[str, List[int]] = json.load(f)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4321"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/total")
