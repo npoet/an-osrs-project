@@ -5,7 +5,9 @@ my current equipped gear.
 
 ![wasting xp as we speak](swag2.gif)
 
-Only tradeable items/item components included. See helm [here](https://oldschool.runescape.wiki/w/Mask_of_rebirth). 
+Only tradeable items/item components included. 
+
+See armor [here](https://oldschool.runescape.wiki/w/Christmas_corrupt_cluefest). 
 
 ### Install
 
