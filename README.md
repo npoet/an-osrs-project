@@ -3,7 +3,7 @@
 I'm probably bankstanding on W420 rn. This service outputs the value of 
 my current equipped gear.
 
-![wasting xp as we speak](swag1.gif)
+![wasting xp as we speak](swag2.gif)
 
 Only tradeable items/item components included. See helm [here](https://oldschool.runescape.wiki/w/Mask_of_rebirth). 
 

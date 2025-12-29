@@ -6,8 +6,8 @@ from pathlib import Path
 from api.prices_wiki import fetch_prices, fetch_timeseries_for_set
 from api.utils import format_gp
 
-# Load items.json at startup
-ITEMS_FILE = Path(__file__).parent / "items.json"
+# Load items1.json at startup
+ITEMS_FILE = Path(__file__).parent / "items2.json"
 with open(ITEMS_FILE, "r", encoding="utf-8") as f:
     ITEM_DICT: Dict[str, List[int]] = json.load(f)
 
